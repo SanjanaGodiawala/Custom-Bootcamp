@@ -1,0 +1,110 @@
+SQL Commands for type implementation
+
+Create table Employee(
+    EmployeeName varchar(10),
+    EmployeeDOB date,
+    EmployeeGender varchar(6),
+    EmployeeLocation varchar(10),
+    EmployeeContact number
+);
+
+desc Employee;
+
+
+INSERT INTO Employee VALUES ('Ram Kumar', '01-Jan-1990' ,'Male','Delhi',7983478874);
+INSERT INTO Employee VALUES ('Sunita', '02-Feb-1991' ,'Female','Bangalore',8976453753);
+INSERT INTO Employee VALUES ('Ajay', '01-Feb-1985' ,'Male','Hyderabad',9876543212);
+INSERT INTO Employee VALUES ('Nitin', '05-Feb-1991' ,'Male','Chennai',7894537674);
+
+
+Select * from Employee;
+
+----Type 1----
+
+Create table D_Employee_SCD1(
+    PK_Employee_Key number not null,
+    E_Contact number not null,
+    EmployeeName varchar(10),
+    EmployeeDOB date,
+    EmployeeGender varchar(6),
+    EmployeeLocation varchar(10),
+    CreatedDate Date,
+    UpdateDate Date,
+    primary key (PK_Employee_Key)
+    
+);
+desc D_Employee;
+
+INSERT INTO D_Employee VALUES (1,7983478874, 'Ram Kumar', '01-Jan-1990' ,'Male','Delhi','30-aug-2023',NULL);
+INSERT INTO D_Employee VALUES (2,8976453753,'Sunita', '02-Feb-1991' ,'Female','Bangalore','30-aug-2023',NULL);
+INSERT INTO D_Employee VALUES (3,9876543212,'Ajay', '01-Feb-1985' ,'Male','Hyderabad','30-aug-2023',NULL);
+INSERT INTO D_Employee VALUES (4,7894537674,'Nitin', '05-Feb-1991' ,'Male','Chennai','30-aug-2023',NULL);
+
+select * from D_Employee;
+
+update Employee set EmployeeLocation = 'Pune' where EmployeeContact = 7894537674;
+update D_Employee set EmployeeLocation = 'Pune', UpdateDate = '31-aug-2023' where PK_Employee_Key = 4;
+
+Select * From Employee;
+Select * From D_employee;
+
+----Type 2----
+
+Create table D_Employee_SCD2(
+    PK_Employee_Key number not null,
+    E_Contact number not null,
+    EmployeeName varchar(10),
+    EmployeeDOB date,
+    EmployeeGender varchar(6),
+    EmployeeLocation varchar(10),
+    StartDate Date,
+    EndDate Date,
+    Version number,
+    Flag char,
+    primary key (PK_Employee_Key)
+);
+
+INSERT INTO D_Employee_SCD2 VALUES (1,7983478874, 'Ram Kumar', '01-Jan-1990' ,'Male','Delhi','30-aug-2023',NULL,1,'Y');
+INSERT INTO D_Employee_SCD2 VALUES (2,8976453753,'Sunita', '02-Feb-1991' ,'Female','Bangalore','30-aug-2023',NULL,1,'Y');
+INSERT INTO D_Employee_SCD2 VALUES (3,9876543212,'Ajay', '01-Feb-1985' ,'Male','Hyderabad','30-aug-2023',NULL,1,'Y');
+INSERT INTO D_Employee_SCD2 VALUES (4,7894537674,'Nitin', '05-Feb-1991' ,'Male','Chennai','30-aug-2023',NULL,1,'Y');
+
+Select * From D_Employee_SCD2;
+
+update Employee set EmployeeLocation = 'Pune' where EmployeeContact = 7894537674;
+update D_Employee_SCD2 set EndDate = '31-aug-2023', Flag = 'N' where PK_Employee_Key = 4;
+INSERT INTO D_Employee_SCD2 VALUES (5,7894537674,'Nitin', '05-Feb-1991' ,'Male','Pune','31-aug-2023',NULL,2,'Y');
+
+Select * From Employee;
+Select * From D_Employee_SCD2;
+
+--- Type 3 ---
+
+Create table D_Employee_SCD3(
+    PK_Employee_Key number not null,
+    E_Contact number not null,
+    EmployeeName varchar(10),
+    EmployeeDOB date,
+    EmployeeGender varchar(6),
+    EmployeeLocation varchar(10),
+    Prev_EmployeeName varchar(10),
+    Prev_EmployeeDOB date,
+    Prev_EmployeeGender varchar(6),
+    Prev_EmployeeLocation varchar(10),
+    CreatedDate Date,
+    UpdateDate Date,
+    primary key (PK_Employee_Key)
+    
+);
+
+INSERT INTO D_Employee_SCD3 VALUES (1,7983478874, 'Ram Kumar', '01-Jan-1990' ,'Male','Delhi','Ram Kumar', '01-Jan-1990' ,'Male','Delhi','30-aug-2023',NULL);
+INSERT INTO D_Employee_SCD3 VALUES (2,8976453753,'Sunita', '02-Feb-1991' ,'Female','Bangalore','Sunita', '02-Feb-1991' ,'Female','Bangalore','30-aug-2023',NULL);
+INSERT INTO D_Employee_SCD3 VALUES (3,9876543212,'Ajay', '01-Feb-1985' ,'Male','Hyderabad','Ajay', '01-Feb-1985' ,'Male','Hyderabad','30-aug-2023',NULL);
+INSERT INTO D_Employee_SCD3 VALUES (4,7894537674,'Nitin', '05-Feb-1991' ,'Male','Chennai','Nitin', '05-Feb-1991' ,'Male','Chennai','30-aug-2023',NULL);
+
+Select * From D_employee_SCD3;
+
+update Employee set EmployeeLocation = 'Pune' where EmployeeContact = 7894537674;
+update D_Employee_SCD3 set EmployeeLocation = 'Pune', Prev_EmployeeLocation='Chennai', UpdateDate = '31-aug-2023' where PK_Employee_Key = 4;
+
+Select * From D_employee_SCD3;
